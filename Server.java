@@ -14,4 +14,12 @@ public class Server {
     public int getPort() {
         return port;
     }
+
+    @Override
+    public String toString() {
+        return "Server{" +
+                "host='" + host + '\'' +
+                ", port=" + port +
+                '}';
+    }
 }
