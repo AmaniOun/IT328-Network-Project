@@ -1,16 +1,15 @@
 public class Reservation {
 
     private String sportType;
-    private String court;
-    private String day;
+    private String courtid;
+    private String date;
     private String time;
 
     // Constructor
-    public Reservation(String username, String sportType, String fieldName, String day, String time) {
-        this.username = username;
+    public Reservation(String sportType, String courtid, String date, String time) {
         this.sportType = sportType;
-        this.fieldName = fieldName;
-        this.day = day;
+        this.courtid = courtid;
+        this.date = date;
         this.time = time;
     }
 
