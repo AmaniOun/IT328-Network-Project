@@ -20,13 +20,13 @@ public class Reservation {
 
     public String getSportMessage() {
         if (sportType.equalsIgnoreCase("TENNIS")) {
-            return "🎾 Tennis courts are available with clay and hard surfaces.";
+            return " Tennis courts are available with clay and hard surfaces.";
         } else if (sportType.equalsIgnoreCase("PADEL")) {
-            return "🏓 Padel courts are indoor and have glass walls.";
+            return " Padel courts are indoor and have glass walls.";
         } else if (sportType.equalsIgnoreCase("FOOTBALL")) {
-            return "⚽ Football fields are 5-a-side and outdoor.";
+            return "Football fields are 5-a-side and outdoor.";
         } else {
-            return "❌ Unknown sport type.";
+            return " Unknown sport type.";
         }
 
     public String getFieldName() {
