@@ -1,5 +1,5 @@
 public class Reservation {
-    private String username;
+
     private String sportType;
     private String fieldName;
     private String day;
