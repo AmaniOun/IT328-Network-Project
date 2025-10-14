@@ -22,4 +22,5 @@ public class Server {
                 ", port=" + port +
                 '}';
     }
+    system.out.println("Server is running on " + host + ":" + port);
 }
