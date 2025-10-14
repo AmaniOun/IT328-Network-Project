@@ -1,7 +1,7 @@
 public class Reservation {
 
     private String sportType;
-    private String fieldName;
+    private String court;
     private String day;
     private String time;
 
