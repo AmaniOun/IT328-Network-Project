@@ -18,16 +18,29 @@ public class Reservation {
         return username;
     }
 
-    public String getSportMessage() {
-        if (sportType.equalsIgnoreCase("TENNIS")) {
-            return " Tennis courts are available with clay and hard surfaces.";
-        } else if (sportType.equalsIgnoreCase("PADEL")) {
-            return " Padel courts are indoor and have glass walls.";
-        } else if (sportType.equalsIgnoreCase("FOOTBALL")) {
-            return "Football fields are 5-a-side and outdoor.";
-        } else {
-            return " Unknown sport type.";
+    public class SportSelector {
+
+    public static String chooseSportType() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("اختر نوع الرياضة:");
+        System.out.println("1. Tennis 🎾");
+        System.out.println("2. Padel 🏓");
+        System.out.println("3. Football ⚽");
+
+        int choice = scanner.nextInt();
+        switch (choice) {
+            case 1:
+                return "TENNIS";
+            case 2:
+                return "PADEL";
+            case 3:
+                return "FOOTBALL";
+            default:
+                System.out.println("❌ اختيار غير صالح. سيتم اختيار Tennis تلقائيًا.");
+                return "TENNIS";
         }
+
+
 
     public String getFieldName() {
         return fieldName;
