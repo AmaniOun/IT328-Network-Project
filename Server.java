@@ -1,3 +1,9 @@
+package server;
+
+import java.net.*;
+import java.io.*;
+import java.util.*;
+
 public class Server {
     private String host;
     private int port;
@@ -14,7 +20,7 @@ public class Server {
     public int getPort() {
         return port;
     }
-// hi
+
     @Override
     public String toString() {
         return "Server{" +
