@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package client;
 
 import java.net.*;
@@ -9,3 +10,6 @@ public class Client {
         new LoginFrame(socket);
     }
 }
+=======
+public static
+>>>>>>> 5775168b6626de6d3a1a06ac098687c15f20323f
