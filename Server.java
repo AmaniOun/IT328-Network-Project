@@ -1,26 +1,23 @@
+package server;
+
+import java.net.*;
+import java.io.*;
+import java.util.*;
+
 public class Server {
-    private String host;
-    private int port;
+    private static List<ClientHandler> clients = new ArrayList<>();
+    public static ServerDatabase database = new ServerDatabase();
 
-    public Server(String host, int port) {
-        this.host = host;
-        this.port = port;
-    }
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(9090);
+        System.out.println("Server started...");
 
-    public String getHost() {
-        return host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    @Override
-    public String toString() {
-        return "Server{" +
-                "host='" + host + '\'' +
-                ", port=" + port +
-                '}';
-    }
-    system.out.println("Server is running on " + host + ":" + port);
+        while (true) {
+            Socket clientSocket = serverSocket.accept();
+            System.out.println("Client connected.");
+            ClientHandler handler = new ClientHandler(clientSocket, database);
+            clients.add(handler);
+            new Thread(handler).start();
+        }
+    }
 }
