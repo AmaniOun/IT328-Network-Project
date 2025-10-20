@@ -1,69 +1,44 @@
-public class Reservation {
+// **Reservation.java**
+// يمثل فترة حجز ملعب معينة.
 
-    private String sportType;
-    private String courtid;
-    private String date;
-    private String time;
+public class Reservation {
+    private String sportType; 
+    private int fieldNumber; 
+    private String day;       
+    private String timeSlot;  
+    private boolean isAvailable; 
+    private String reservedByUsername; 
 
     // Constructor
-    public Reservation(String sportType, String courtid, String date, String time) {
+    public Reservation(String sportType, int fieldNumber, String day, String timeSlot) {
         this.sportType = sportType;
-        this.courtid = courtid;
-        this.date = date;
-        this.time = time;
+        this.fieldNumber = fieldNumber;
+        this.day = day;
+        this.timeSlot = timeSlot;
+        this.isAvailable = true; 
+        this.reservedByUsername = null;
     }
 
     // Getters
-    public String getUsername() {
-        return username;
+    public boolean isAvailable() { return isAvailable; }
+    public String getSportType() { return sportType; }
+    public int getFieldNumber() { return fieldNumber; }
+    public String getDay() { return day; }
+    public String getTimeSlot() { return timeSlot; }
+    
+    // Method to reserve the slot (Implementing function 4: Update the availability)
+    public void reserve(String username) {
+        this.isAvailable = false;
+        this.reservedByUsername = username;
     }
 
-    public class SportSelector {
-
-    public static String chooseSportType() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("اختر نوع الرياضة:");
-        System.out.println("1. Tennis 🎾");
-        System.out.println("2. Padel 🏓");
-        System.out.println("3. Football ⚽");
-
-        int choice = scanner.nextInt();
-        switch (choice) {
-            case 1:
-                return "TENNIS";
-            case 2:
-                return "PADEL";
-            case 3:
-                return "FOOTBALL";
-            default:
-                System.out.println("❌ اختيار غير صالح. سيتم اختيار Tennis تلقائيًا.");
-                return "TENNIS";
-        }
-
-
-
-    public String getFieldName() {
-        return fieldName;
+    // لطباعة معلومات الفترات المتاحة للعميل (سنستخدم جزءاً منها في الـ GUI)
+    public String getDisplayString() {
+        return String.format("Field %d - Time: %s", fieldNumber, timeSlot);
     }
-
-    public String getDay() {
-        return day;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    // Method to get a readable summary of the reservation
-    public String getReservationInfo() {
-        return "User: " + username + " | Sport: " + sportType + " | Field: " + fieldName +
-               " | Day: " + day + " | Time: " + time;
-    }
-
-    // Method to check if this reservation matches a given slot
-    public boolean matches(String sport, String day, String time) {
-        return this.sportType.equalsIgnoreCase(sport) &&
-               this.day.equalsIgnoreCase(day) &&
-               this.time.equalsIgnoreCase(time);
+    
+    // المفتاح الفريد الذي سيستخدمه الخادم لتحديد فترة الحجز
+    public String getKey() {
+        return String.format("%s_%d_%s_%s", sportType, fieldNumber, day, timeSlot);
     }
 }
