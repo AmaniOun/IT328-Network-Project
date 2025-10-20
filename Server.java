@@ -1,3 +1,9 @@
+package server;
+
+import java.net.*;
+import java.io.*;
+import java.util.*;
+
 public class Server {
     private String host;
     private int port;

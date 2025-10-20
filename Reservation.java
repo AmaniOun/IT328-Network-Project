@@ -1,16 +1,15 @@
 public class Reservation {
-    private String username;
+
     private String sportType;
-    private String fieldName;
-    private String day;
+    private String courtid;
+    private String date;
     private String time;
 
     // Constructor
-    public Reservation(String username, String sportType, String fieldName, String day, String time) {
-        this.username = username;
+    public Reservation(String sportType, String courtid, String date, String time) {
         this.sportType = sportType;
-        this.fieldName = fieldName;
-        this.day = day;
+        this.courtid = courtid;
+        this.date = date;
         this.time = time;
     }
 
@@ -19,9 +18,29 @@ public class Reservation {
         return username;
     }
 
-    public String getSportType() {
-        return sportType;
-    }
+    public class SportSelector {
+
+    public static String chooseSportType() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("اختر نوع الرياضة:");
+        System.out.println("1. Tennis 🎾");
+        System.out.println("2. Padel 🏓");
+        System.out.println("3. Football ⚽");
+
+        int choice = scanner.nextInt();
+        switch (choice) {
+            case 1:
+                return "TENNIS";
+            case 2:
+                return "PADEL";
+            case 3:
+                return "FOOTBALL";
+            default:
+                System.out.println("❌ اختيار غير صالح. سيتم اختيار Tennis تلقائيًا.");
+                return "TENNIS";
+        }
+
+
 
     public String getFieldName() {
         return fieldName;
