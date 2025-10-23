@@ -34,7 +34,8 @@ public class Server {
     private static void initializeSlots() {
         String[] sports = {"Tennis", "Padel", "Football"};
         String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-        String[] timeSlots = {"10:00-11:00", "11:00-12:00", "15:00-16:00", "16:00-17:00"}; 
+        String[] timeSlots = {"07:00-08:00 AM", "08:00-10:00 AM", "10:00-11:00 AM", 
+                          "07:00-08:00 PM", "08:00-10:00 PM", "10:00-11:00 PM"}; 
 
         for (String sport : sports) {
             for (int field = 1; field <= 5; field++) {
@@ -105,32 +106,71 @@ public class Server {
                 
                 // 2. طلب التوافر (Request Availability)
                 case "AVAILABILITY_REQUEST":
-                    if (parts.length < 3) return "ERROR#Invalid availability request format";
-                    String reqSport = parts[1];
-                    String reqDay = parts[2];
+            if (parts.length < 3) return "ERROR#Invalid availability request format";
+            
+            String reqSport = parts[1];
+            String reqDay = parts[2];
+
+            // 1. طلب قائمة الملاعب المتاحة (Parts Length = 3)
+            if (parts.length == 3) { 
+                Set<Integer> availableFields = new HashSet<>();
+                
+                // البحث عن الملاعب التي تحتوي على أي فترات متاحة في ذلك اليوم وتلك الرياضة
+                synchronized (ALL_SLOTS) {
+                    for (Reservation slot : ALL_SLOTS.values()) {
+                        if (slot.getSportType().equalsIgnoreCase(reqSport) && 
+                            slot.getDay().equalsIgnoreCase(reqDay) && 
+                            slot.isAvailable()) {
+                            availableFields.add(slot.getFieldNumber());
+                        }
+                    }
+                }
+                
+                if (availableFields.isEmpty()) {
+                    return "AVAILABILITY_RESPONSE#No available fields for " + reqSport + " on " + reqDay;
+                }
+                
+                // إرجاع قائمة الملاعب المتاحة (مثلاً: Field 1~Field 3~...)
+                StringBuilder sb = new StringBuilder("AVAILABILITY_RESPONSE#");
+                availableFields.stream().sorted().forEach(f -> sb.append("Field ").append(f).append("~"));
+                return sb.toString();
+            } 
+            
+            // 2. طلب الأوقات المتاحة لملعب محدد (Parts Length = 4)
+            else if (parts.length == 4) {
+                try {
+                    int reqField = Integer.parseInt(parts[3]); // رقم الملعب
                     
-                    List<Reservation> availableSlots = new ArrayList<>();
-                    // استخدام 'synchronized' لقراءة حالة ALL_SLOTS بشكل آمن
+                    List<String> availableTimeSlots = new ArrayList<>();
+                    
+                    // البحث عن جميع الأوقات الستة لهذا الملعب المحدد واليوم والرياضة
                     synchronized (ALL_SLOTS) {
                         for (Reservation slot : ALL_SLOTS.values()) {
                             if (slot.getSportType().equalsIgnoreCase(reqSport) && 
                                 slot.getDay().equalsIgnoreCase(reqDay) && 
-                                slot.isAvailable()) {
-                                availableSlots.add(slot);
+                                slot.getFieldNumber() == reqField) {
+                                
+                                String status = slot.isAvailable() ? " (Available)" : " (BOOKED)";
+                                availableTimeSlots.add(slot.getTimeSlot() + status);
                             }
                         }
                     }
-                    
-                    if (availableSlots.isEmpty()) {
-                        return "AVAILABILITY_RESPONSE#No available fields for " + reqSport + " on " + reqDay;
+
+                    if (availableTimeSlots.isEmpty()) {
+                        return "AVAILABILITY_RESPONSE#Field data not found.";
                     }
                     
-                    // تحويل قائمة الفترات المتاحة إلى سلسلة نصية للـ GUI
+                    // إرجاع جميع الفترات الست مع حالتها
                     StringBuilder sb = new StringBuilder("AVAILABILITY_RESPONSE#");
-                    for (Reservation slot : availableSlots) {
-                        sb.append(slot.getDisplayString()).append("~");
-                    }
+                    availableTimeSlots.forEach(s -> sb.append(s).append("~"));
                     return sb.toString();
+
+                } catch (NumberFormatException e) {
+                    return "ERROR#Invalid field number format.";
+                }
+            } else {
+                 return "ERROR#Invalid availability request format (Wrong number of parts).";
+            }
 
                 // 3 و 4. تأكيد وتحديث الحجز (Confirm and Update)
                 case "RESERVE":
